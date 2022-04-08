@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML 문서의 유횽성 체크를 위해 필요 -->
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<!-- 마이바트스 설정과 관련하여 기본셋팅을 선언할수 있는 영역 -->
+<configuration>
+	
+	<!-- null 데이터가 전달되었다면 빈칸이 아닌 null로 인식하라는 뜻, 주의: value에 null은 반드시 대문자로 !! -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias type="com.uni.myBatis.member.model.dto.Member" alias="Member"/>
+		<typeAlias type="com.uni.myBatis.board.model.dto.Board" alias="Board"/>
+		
+	</typeAliases>
+	
+	<!-- DB연결할 성절에 대한 정보룰 선언하는 영역 
+		default : 연결설정을 여러개 생성할 수 있고 아이디로 구분하는데 기본으로 연결할 설정정보를 가르키는 속성-->
+	<environments default="development">
+		<environment id="development">
+			<!-- 
+				마이바티스의 핵심이 되는 설정은 트랜잭션을 제어하기 위한 TransactionManager와 함께 
+				데이터 베이스 Connection 인스턴스를 가져오기 위한 DataSource를 포함
+				
+				* TransactionManager는 JDBC와 MANAGED 둘 중 하나를 선택할 수 있음
+				- JDBC : JDBC가 commit과 rollback의 기증을 직접 사용 가능하게 하는 옵션(수동 commit)
+						   트랜잭션의 스코프를 관리하기 위해 dataSource로 부터 커넥션을 가져온다.
+				
+				- MANAGED : 트랜잭션에 대해 어떠한 영향도 행사하지 않는다는 옵션(자동 commit)
+							컨테이너가 트랜잭션의 모든 생명주기를 관리한다. 디폴트로 커넥션을 닫아줌
+			 -->
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED"><!-- 한번 등록 해놓으면 캐쉬로 등록해서 다음번에도 계속적용 -->
+		        <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+		        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		        <property name="username" value="mybatis"/>
+		        <property name="password" value="mybatis"/>
+	      	</dataSource>
+			
+		
+		</environment>
+	
+	</environments>
+
+	<mappers>
+		<mapper resource="/mappers/member-mapper.xml"/>
+		<mapper resource="/mappers/board-mapper.xml"/>
+	</mappers>
+
+</configuration>
